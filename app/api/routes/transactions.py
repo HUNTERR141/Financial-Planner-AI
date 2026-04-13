@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 import asyncio
 
 from google.adk.runners import Runner
+from google.genai.types import Content, Part
 from app.api.deps import get_adk_runner, get_db
 from app.db.crud import get_transactions
 
@@ -21,9 +22,22 @@ async def process_transaction(
     Receives natural language transaction logs and seamlessly delegates them to the AI agents.
     """
     try:
-        # Offload sync ADK call to threadpool to preserve async API integrity
-        response = await asyncio.to_thread(runner.run, request.message)
-        return {"response": response, "agent_routed": True}
+        content = Content(parts=[Part(text=request.message)], role="USER")
+        response_parts = []
+
+        async for event in runner.run_async(
+            user_id="user",
+            session_id="default",
+            new_message=content,
+        ):
+            event_content = getattr(event, "content", None)
+            if not event_content:
+                continue
+            for part in getattr(event_content, "parts", []) or []:
+                if getattr(part, "text", None):
+                    response_parts.append(part.text)
+
+        return {"response": "".join(response_parts), "agent_routed": True}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

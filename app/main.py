@@ -1,3 +1,10 @@
+import os
+
+from app.config.settings import settings
+
+if settings.GOOGLE_API_KEY:
+    os.environ.setdefault("GOOGLE_API_KEY", settings.GOOGLE_API_KEY)
+
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.adk.memory import InMemoryMemoryService

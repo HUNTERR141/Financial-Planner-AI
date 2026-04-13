@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 import asyncio
 
 from google.adk.runners import Runner
+from google.genai.types import Content, Part
 from app.api.deps import get_adk_runner
 from app.services.analytics_service import generate_analytics_report
 from app.services.forecasting_service import generate_forecast
@@ -17,8 +18,22 @@ async def get_ai_insights(
     Queries the intelligent agent layer to provide text-based contextual insights and recommendations.
     """
     try:
-        response = await asyncio.to_thread(runner.run, query)
-        return {"insights_report": response}
+        content = Content(parts=[Part(text=query)], role="USER")
+        response_parts = []
+
+        async for event in runner.run_async(
+            user_id="user",
+            session_id="default",
+            new_message=content,
+        ):
+            event_content = getattr(event, "content", None)
+            if not event_content:
+                continue
+            for part in getattr(event_content, "parts", []) or []:
+                if getattr(part, "text", None):
+                    response_parts.append(part.text)
+
+        return {"insights_report": "".join(response_parts)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
