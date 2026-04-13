@@ -1,0 +1,45 @@
+version: "1.0"
+project:
+  name: Financial Planner AI
+  description: Multi-agent financial advisor and tracking assistant.
+  version: 1.0.0
+
+# Critical for adk web compatibility
+entrypoint: "app/main.py"
+
+# Agent registry
+agents:
+  orchestrator:
+    module: app.orchestrator
+    function: orchestrator
+  transaction_agent:
+    module: app.agents.transaction_agent
+    function: transaction_agent
+  categorization_agent:
+    module: app.agents.categorization_agent
+    function: categorization_agent
+  analytics_agent:
+    module: app.agents.analytics_agent
+    function: analytics_agent
+  forecasting_agent:
+    module: app.agents.forecasting_agent
+    function: forecasting_agent
+  advisor_agent:
+    module: app.agents.advisor_agent
+    function: advisor_agent
+  memory_agent:
+    module: app.agents.memory_agent
+    function: memory_agent
+
+# Tool registry
+tools:
+  db_tools:
+    module: app.tools.db_tools
+  categorization_tools:
+    module: app.tools.categorization_tools
+  analytics_tools:
+    module: app.tools.analytics_tools
+  forecasting_tools:
+    module: app.tools.forecasting_tools
+  memory_tools:
+    module: app.tools.memory_tools

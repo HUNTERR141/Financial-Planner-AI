@@ -1,0 +1,23 @@
+{
+  "categories": [
+    "Food",
+    "Transport",
+    "Utilities",
+    "Rent",
+    "Entertainment",
+    "Shopping",
+    "Income",
+    "Healthcare"
+  ],
+  "rules": {
+    "swiggy": "Food",
+    "zomato": "Food",
+    "uber": "Transport",
+    "ola": "Transport",
+    "netflix": "Entertainment",
+    "amazon": "Shopping",
+    "electricity": "Utilities",
+    "salary": "Income",
+    "pharmacy": "Healthcare"
+  }
+}

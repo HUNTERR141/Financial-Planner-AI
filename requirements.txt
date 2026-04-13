@@ -1,0 +1,13 @@
+# Web Framework
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+
+# Database & ORM
+SQLAlchemy>=2.0.0
+
+# Data Validation & Configuration
+pydantic>=2.4.0
+pydantic-settings>=2.0.0
+
+# AI & Agent Orchestration
+google-adk
