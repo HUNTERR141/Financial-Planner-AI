@@ -144,8 +144,29 @@ Transaction  Categ.  Analytics  Forecast  Advisor
 
 ---
 
+## 🔮 Future Improvements
+
+- UPI and SMS transaction parser
+- Dashboard(good frontend)
+- Security and threat detection
+
+## Contributing
+
+  Contributions are welcome.
+- Fork the repo
+- Create a new branch(branch\your_feature)
+- Commit changes
+- Push the changes and generate PR
+
+
 ## 🙌 Acknowledgements
 
 - [Google ADK](https://google.github.io/adk-docs/) — Agent Development Kit
 - [FastAPI](https://fastapi.tiangolo.com/) — Modern Python web framework
 - [SQLAlchemy](https://www.sqlalchemy.org/) — Python SQL toolkit
+
+
+## ⭐Show your support
+
+ Give a star⭐ if you liked my project. <br>
+ Thank you.
