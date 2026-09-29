@@ -11,6 +11,10 @@ CATEGORIES_FILE_PATH = os.path.join(DATA_DIR, "categories.json")
 # Application Constants
 DEFAULT_CURRENCY = "USD"
 MAX_TRANSACTION_LIMIT_PER_QUERY = 1000
+ALLOWED_CATEGORIES = (
+	"Food", "Transport", "Utilities", "Rent", "Entertainment",
+	"Shopping", "Income", "Healthcare",
+)
 
 # Agent Names mapping
 ORCHESTRATOR_AGENT = "orchestrator"

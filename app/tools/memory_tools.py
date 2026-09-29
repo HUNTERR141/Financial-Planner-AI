@@ -2,6 +2,7 @@ from app.memory.user_memory import save_insight_to_memory, get_all_insights_from
 from app.memory.context_manager import build_full_context, build_memory_context
 from app.tools.analytics_tools import get_spending_analytics
 from app.tools.forecasting_tools import get_future_forecast
+from app.context import get_current_user_id
 import json
 
 def get_raw_transaction_history() -> str:
@@ -13,16 +14,22 @@ def get_raw_transaction_history() -> str:
     from app.db.models import DBTransaction
     db = SessionLocal()
     try:
-        txs = db.query(DBTransaction).order_by(DBTransaction.date).all()
+        user_id = get_current_user_id()
+        if not user_id:
+            return "A user identity is required."
+        txs = (db.query(DBTransaction)
+               .filter(DBTransaction.user_id == user_id)
+               .order_by(DBTransaction.date).all())
         if not txs:
             return "No transactions found."
             
         res = ["=== Raw Transaction Data ==="]
         for t in txs:
-            res.append(f"{t.date[:10]} | ${t.amount:.2f} | {t.category} | {t.description}")
+            date_text = t.date[:10] if t.date else "Unknown"
+            res.append(f"{date_text} | ${t.amount:.2f} | {t.category} | {t.description}")
         return "\n".join(res)
     except Exception as e:
-        return f"Database read error: {str(e)}"
+        return "Database read error."
     finally:
         db.close()
 
@@ -35,7 +42,7 @@ def save_financial_insight(insight_type: str, title: str, description: str) -> s
         save_insight_to_memory(insight_type, title, description)
         return f"Successfully saved {insight_type.upper()}: {title}"
     except Exception as e:
-        return f"ERROR: Could not save insight. Details: {str(e)}"
+        return "ERROR: Could not save insight."
 
 def get_intelligence_summary() -> str:
     """Returns the compiled abstract memory insights."""
@@ -48,7 +55,7 @@ def get_full_advisor_context() -> str:
         forecast  = get_future_forecast()
         return build_full_context(analytics, forecast)
     except Exception as e:
-        return f"ERROR: Could not build full advisor context. Details: {str(e)}"
+        return "ERROR: Could not build full advisor context."
 
 # Backwards compatibility endpoints for the Advisor agent
 def recall_user_insights() -> str:

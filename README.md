@@ -94,6 +94,7 @@ Create a `.env` file in the project root:
 ```env
 GOOGLE_API_KEY=your_google_api_key_here
 DATABASE_URL=sqlite:///./financial_data.db
+CORS_ORIGINS=http://localhost:3000
 ```
 
 > **Note:** Never commit your `.env` file. It is already listed in `.gitignore`.
@@ -105,7 +106,7 @@ DATABASE_URL=sqlite:///./financial_data.db
 ### Using FastAPI directly
 
 ```bash
-uvicorn app.main:app --reload
+uvicorn app.api.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 API docs available at [http://localhost:8000/docs](http://localhost:8000/docs).
@@ -141,6 +142,9 @@ Transaction  Categ.  Analytics  Forecast  Advisor
 |---|---|---|
 | `GOOGLE_API_KEY` | Google Gemini API key for ADK agents | ✅ |
 | `DATABASE_URL` | SQLAlchemy database connection string | ✅ |
+| `CORS_ORIGINS` | Comma-separated browser origins allowed to call the API | ✅ |
+
+> This project is configured for a single local user. No `X-API-Key` or `X-User-ID` headers are required in normal local usage.
 
 ---
 

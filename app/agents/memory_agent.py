@@ -34,7 +34,7 @@ RESTRICTIONS:
 
     return LlmAgent(
         name="memory_agent",
-        model="gemini-2.5-flash",
+        model="gemini-3.6-flash",
         instruction=instructions,
         tools=[get_raw_transaction_history, save_financial_insight, get_intelligence_summary]
     )

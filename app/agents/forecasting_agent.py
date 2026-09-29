@@ -22,7 +22,7 @@ Example Output to User format:
 
     return LlmAgent(
         name="forecasting_agent",
-        model="gemini-2.5-flash",
+        model="gemini-3.6-flash",
         instruction=instructions,
         tools=[get_future_forecast]
     )

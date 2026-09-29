@@ -16,7 +16,7 @@ Your role is to route user intents to the appropriate specialized financial agen
 You are the central point of contact for the user. 
 
 Available agents:
-1. **transaction_agent**: Handles raw transactions, logging, deleting, or finding specific transactions.
+1. **transaction_agent**: Handles natural-language transaction logging.
 2. **categorization_agent**: Categorizes transactions into relevant categories (e.g., groceries, rent).
 3. **analytics_agent**: Analyzes spending habits, computes trends, and provides statistical summaries.
 4. **forecasting_agent**: Forecasts future expenses, cash flows, and budgets based on trends.
@@ -44,7 +44,7 @@ Instructions:
 
     return LlmAgent(
         name="orchestrator",
-        model="gemini-2.5-flash",
+        model="gemini-3.6-flash",
         instruction=instructions,
         tools=[
             AgentTool(transaction_agent()),

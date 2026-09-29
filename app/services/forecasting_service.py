@@ -2,11 +2,17 @@ import datetime
 from collections import defaultdict
 from app.db.session import SessionLocal
 from app.db.models import DBTransaction
+from app.context import get_current_user_id
 
-def generate_forecast() -> dict:
+def generate_forecast(user_id: str = None) -> dict:
     db = SessionLocal()
     try:
-        transactions = db.query(DBTransaction).filter(DBTransaction.amount > 0).all()
+        owner_id = user_id or get_current_user_id()
+        if not owner_id:
+            raise ValueError("A user identity is required to generate a forecast")
+        transactions = (db.query(DBTransaction)
+                        .filter(DBTransaction.user_id == owner_id, DBTransaction.amount > 0)
+                        .all())
         if not transactions:
             return {
                 "predicted_next_month_spend": 0.0,
@@ -65,10 +71,15 @@ def generate_forecast() -> dict:
                 last_3 = cat_months[-3:]
                 cat_avg = sum(months_data[m] for m in last_3) / len(last_3)
             else:
-                # If only one month of category data, use that month's total or scale it
-                # For simplicity, we just take the sum of that month's data. If we were thorough, we'd scale based on days.
                 cat_avg = sum(months_data.values())
             category_forecasts[cat] = cat_avg
+
+        category_total = sum(category_forecasts.values())
+        if category_total > 0:
+            category_forecasts = {
+                category: value * avg_monthly_spend / category_total
+                for category, value in category_forecasts.items()
+            }
                 
         return {
             "predicted_next_month_spend": round(avg_monthly_spend, 2),

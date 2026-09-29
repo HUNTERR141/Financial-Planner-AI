@@ -1,5 +1,6 @@
 from google.adk.agents.llm_agent import LlmAgent
 from app.tools.categorization_tools import suggest_category, list_allowed_categories, apply_category
+from app.services.categorization_service import get_allowed_categories
 
 def categorization_agent() -> LlmAgent:
     instructions = """You are the Categorization Agent.
@@ -24,7 +25,7 @@ Only use standard tools available. No direct logic bypassing is allowed.
 
     return LlmAgent(
         name="categorization_agent",
-        model="gemini-2.5-flash",
+        model="gemini-3.6-flash",
         instruction=instructions,
         tools=[suggest_category, list_allowed_categories, apply_category]
     )

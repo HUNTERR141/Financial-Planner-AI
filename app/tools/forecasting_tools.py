@@ -15,4 +15,4 @@ def get_future_forecast() -> str:
         forecast_data = generate_forecast()
         return json.dumps(forecast_data, indent=2)
     except Exception as e:
-        return f"ERROR: Failed to generate forecast. Details: {str(e)}"
+        return "ERROR: Failed to generate forecast."

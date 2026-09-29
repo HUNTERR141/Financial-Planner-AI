@@ -54,7 +54,7 @@ RULES:
 
     return LlmAgent(
         name="advisor_agent",
-        model="gemini-2.5-flash",
+        model="gemini-3.6-flash",
         instruction=instructions,
         tools=[get_full_advisor_context, recall_user_insights, remember_insight]
     )

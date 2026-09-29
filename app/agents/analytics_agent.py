@@ -32,7 +32,7 @@ I've also prepared the charts-ready data for your dashboard."
 
     return LlmAgent(
         name="analytics_agent",
-        model="gemini-2.5-flash",
+        model="gemini-3.6-flash",
         instruction=instructions,
         tools=[get_spending_analytics]
     )

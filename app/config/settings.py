@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     
     # DB Config
     DATABASE_URL: str = "sqlite:///./financial_data.db"
+    CORS_ORIGINS: str = "http://localhost:3000"
     
     # API Keys
     GOOGLE_API_KEY: Optional[str] = None

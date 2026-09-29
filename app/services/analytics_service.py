@@ -3,11 +3,17 @@ from typing import List, Dict, Any
 from app.db.session import SessionLocal
 from app.db.models import DBTransaction
 from app.schemas.insights import AnalyticsReport, CategoryAnalysis, TrendAnalysis, TrendDataPoint
+from app.context import get_current_user_id
 
-def generate_analytics_report() -> AnalyticsReport:
+def generate_analytics_report(user_id: str = None) -> AnalyticsReport:
     db = SessionLocal()
     try:
-        transactions = db.query(DBTransaction).all()
+        owner_id = user_id or get_current_user_id()
+        if not owner_id:
+            raise ValueError("A user identity is required to generate analytics")
+        transactions = (db.query(DBTransaction)
+                        .filter(DBTransaction.user_id == owner_id, DBTransaction.amount > 0)
+                        .all())
         
         total_spend = sum(t.amount for t in transactions if t.amount > 0) # Assumes positive amount is spend, or adjust based on logic
         
@@ -18,7 +24,6 @@ def generate_analytics_report() -> AnalyticsReport:
             cat = t.category if t.category else "Uncategorized"
             category_totals[cat] += t.amount
             
-            # Simple date grouping by YYYY-MM-DD
             date_str = t.date[:10] if getattr(t, "date", None) else "Unknown"
             date_totals[date_str] += t.amount
             

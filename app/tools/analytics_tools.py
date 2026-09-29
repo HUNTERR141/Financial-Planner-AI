@@ -14,4 +14,4 @@ def get_spending_analytics() -> str:
             return report.model_dump_json()
         return report.json()
     except Exception as e:
-        return f"ERROR: Failed to generate analytics. Details: {str(e)}"
+        return "ERROR: Failed to generate analytics."

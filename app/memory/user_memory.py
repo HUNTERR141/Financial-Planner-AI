@@ -4,6 +4,7 @@ Intelligence layer to store insights, patterns, and long-term user behavior.
 Built with reusable APIs and a class structure to ensure future DB migration compatibility.
 """
 from typing import Dict, List
+from app.context import get_current_user_id
 
 class InsightModel:
     def __init__(self, insight_type: str, title: str, description: str):
@@ -15,16 +16,24 @@ class MemoryStore:
     def __init__(self):
         # Dictionary acts as our DB layer for now.
         # Prepared for an easy SQLAlchemy translation later
-        self._db: Dict[str, InsightModel] = {}
+        self._db: Dict[str, Dict[str, InsightModel]] = {}
         
     def save(self, insight_type: str, title: str, description: str) -> None:
-        self._db[title] = InsightModel(insight_type, title, description)
+        user_id = get_current_user_id()
+        if not user_id:
+            raise ValueError("A user identity is required to save an insight")
+        self._db.setdefault(user_id, {})[title] = InsightModel(insight_type, title, description)
         
     def get_all(self) -> List[InsightModel]:
-        return list(self._db.values())
+        user_id = get_current_user_id()
+        if not user_id:
+            return []
+        return list(self._db.get(user_id, {}).values())
         
     def clear(self):
-        self._db.clear()
+        user_id = get_current_user_id()
+        if user_id:
+            self._db.pop(user_id, None)
 
 # Global singleton representing active session memory
 _memory_db = MemoryStore()
